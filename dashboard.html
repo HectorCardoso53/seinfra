@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Ordem de Serviço</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+
+<body>
+
+    <!-- Topbar Mobile -->
+    <div class="topbar">
+        <button class="menu-toggle" onclick="toggleMenu()">
+            <i class="bi bi-list"></i>
+        </button>
+        <span class="topbar-title">Sistema OS</span>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/img/prefeitura.png" alt="Prefeitura" class="sidebar-logo">
+                <h2>Sistema OS</h2>
+                <p>Gestão de Ordens de Serviço</p>
+            </div>
+
+            <div class="menu-item active" onclick="showPage('dashboard', this)">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                        d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+                Dashboard
+            </div>
+
+            <div class="menu-item" onclick="showPage('nova-os', this)">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                        clip-rule="evenodd" />
+                </svg>
+                Nova Ordem
+            </div>
+
+            <div class="menu-item" onclick="showPage('relatorios', this)">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                    <path fill-rule="evenodd"
+                        d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                        clip-rule="evenodd" />
+                </svg>
+                Relatórios
+            </div>
+
+            <div class="menu-item" onclick="showPage('materiais-mes', this)">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 3h14v2H3zM3 7h14v2H3zM3 11h14v2H3zM3 15h14v2H3z" />
+                </svg>
+                Materiais por Mês
+            </div>
+
+            <!-- 🔐 ABA ADMIN -->
+            <div class="menu-item admin-only" onclick="showPage('usuarios', this)">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 2a4 4 0 100 8 4 4 0 000-8zm-6 14a6 6 0 1112 0H4z"
+                        clip-rule="evenodd" />
+                </svg>
+                Cadastro de Usuários
+            </div>
+
+            <div class="menu-item" onclick="showPage('tutorial', this)">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M4 3h12a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1zm3 3l6 4-6 4V6z" />
+                </svg>
+                Tutorial
+            </div>
+
+
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header Global -->
+            <div class="header header-global">
+                <div class="header-info">
+                    <h1 id="page-title">Sistema OS</h1>
+                    <p id="page-subtitle">Gestão de Ordens de Serviço</p>
+                </div>
+
+                <button class="btn btn-danger btn-logout" onclick="logout()">
+                    <i class="bi bi-box-arrow-right"></i> Sair
+                </button>
+            </div>
+
+            <!-- Dashboard Page -->
+            <div id="page-dashboard" class="page">
+                <!-- CARDS -->
+                <div class="cards-grid">
+
+                    <div class="card card-blue">
+                        <div class="card-header">
+                            <div class="card-title">Total de Ordens</div>
+                            <div class="card-icon">
+                                <svg fill="currentColor" viewBox="0 0 20 20" width="24" height="24">
+                                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                                    <path fill-rule="evenodd"
+                                        d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="card-value" id="total-ordens">0</div>
+                    </div>
+
+
+                    <div class="card card-orange">
+                        <div class="card-header">
+                            <div class="card-title">Em Andamento</div>
+                            <div class="card-icon">
+                                <svg fill="currentColor" viewBox="0 0 20 20" width="24" height="24">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="card-value" id="total-andamento">0</div>
+                    </div>
+
+
+                    <div class="card card-green">
+                        <div class="card-header">
+                            <div class="card-title">Encerradas</div>
+                            <div class="card-icon">
+                                <svg fill="currentColor" viewBox="0 0 20 20" width="24" height="24">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="card-value" id="total-encerradas">0</div>
+                    </div>
+
+
+                    <div class="card card-purple">
+                        <div class="card-header">
+                            <div class="card-title">Materiais Usados</div>
+                            <div class="card-icon">
+                                <svg fill="currentColor" viewBox="0 0 20 20" width="24" height="24">
+                                    <path
+                                        d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="card-value" id="total-materiais">0</div>
+                    </div>
+
+                </div>
+
+                <!-- GRÁFICOS -->
+                <div class="charts-grid">
+
+                    <div class="chart-box">
+                        <h3>Status das Ordens</h3>
+                        <canvas id="grafico-status"></canvas>
+                    </div>
+
+                    <div class="chart-box">
+                        <h3>Ordens por Mês</h3>
+                        <canvas id="grafico-mes"></canvas>
+                    </div>
+
+                </div>
+
+
+
+                <!-- TABELA -->
+                <div class="table-container">
+
+                    <div class="table-header">
+                        <h3>Últimas Ordens de Serviço</h3>
+                    </div>
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Nº OS</th>
+                                <th>Data</th>
+                                <th>Solicitante</th>
+                                <th>Serviço</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tabela-dashboard">
+
+                            <tr>
+                                <td colspan="6" class="empty-state">
+                                    <svg fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+
+                                    <h3>Nenhuma ordem de serviço cadastrada</h3>
+                                    <p>Clique em "Nova Ordem" para criar sua primeira OS</p>
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <!-- Nova OS Page -->
+            <div id="page-nova-os" class="page hidden">
+                <form id="form-os">
+                    <div class="form-section">
+                        <h3>Dados da Ordem</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Número da OS</label>
+                                <input type="text" id="numero-os" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Data e Hora de Abertura</label>
+                                <input type="datetime-local" id="data-abertura" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Setor Responsável</label>
+                                <select id="setor-responsavel" required>
+
+                                    <option value="">Selecione...</option>
+
+                                    <option>DIRETORIA ADMINISTRATIVA</option>
+                                    <option>DIRETORIA DE INFRAESTRUTURA</option>
+                                    <option>DIRETORIA DE SANEAMENTO</option>
+                                    <option>DIRETORIA DE LIMPEZA URBANA</option>
+                                    <option>DIRETORIA DE SERVIÇO E ABASTECIMENTO DE ÁGUA</option>
+                                    <option>DIRETORIA DE TRANSPORTES PÚBLICOS COLETIVOS</option>
+                                    <option>DIRETORIA DE AEROPORTO</option>
+
+                                </select>
+
+                                <input type="text" id="novo-setor" placeholder="Digite a nova diretoria" class="hidden"
+                                    style="margin-top:8px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Dados do Solicitante</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nome do Solicitante</label>
+                                <input type="text" id="nome-solicitante" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Setor do Solicitante</label>
+                                <input type="text" id="setor-solicitante" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Serviço</h3>
+                        <div class="form-grid">
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label>Descrição Detalhada do Serviço</label>
+                                <textarea id="descricao-servico" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Local do Serviço</label>
+                                <input type="text" id="local-servico" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Materiais Utilizados</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Descrição de Material</label>
+                                <input type="text" id="material-nome" placeholder="Digite o material">
+                            </div>
+                            <div class="form-group">
+                                <label>Unidade</label>
+                                <input type="text" id="material-unidade" placeholder="Ex: UN, M, KG, L">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Quantidade</label>
+                                <input type="number" id="material-quantidade" min="0" step="0.01">
+                            </div>
+
+
+
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="adicionarMaterial()">
+                            <i class="bi bi-plus-circle"></i> Adicionar Material
+                        </button>
+                        <div id="lista-materiais" class="material-list hidden"></div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Responsáveis</h3>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label>Responsável pela Execução</label>
+                                <input type="text" id="responsavel-execucao" required>
+                            </div>
+
+                            <!-- 👇 AUTOMÁTICO PELO SISTEMA -->
+                            <div class="form-group">
+                                <label>Responsável pela Abertura</label>
+                                <input type="text" id="responsavel-abertura" readonly
+                                    placeholder="Carregando usuário...">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-success">
+                            Salvar Ordem
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="limparFormulario()">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Relatórios Page -->
+            <div id="page-relatorios" class="page hidden">
+
+                <div class="filter-section">
+                    <div class="filter-grid">
+
+                        <div class="form-group">
+                            <label>Data Inicial</label>
+                            <input type="date" id="filtro-data-inicio">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Data Final</label>
+                            <input type="date" id="filtro-data-fim">
+                        </div>
+
+                        <!-- 🆕 MÊS -->
+                        <div class="form-group">
+                            <label>Mês</label>
+                            <select id="filtro-mes">
+                                <option value="">Todos</option>
+                                <option value="0">Janeiro</option>
+                                <option value="1">Fevereiro</option>
+                                <option value="2">Março</option>
+                                <option value="3">Abril</option>
+                                <option value="4">Maio</option>
+                                <option value="5">Junho</option>
+                                <option value="6">Julho</option>
+                                <option value="7">Agosto</option>
+                                <option value="8">Setembro</option>
+                                <option value="9">Outubro</option>
+                                <option value="10">Novembro</option>
+                                <option value="11">Dezembro</option>
+                            </select>
+                        </div>
+
+                        <!-- 🆕 ANO -->
+                        <div class="form-group">
+                            <label>Ano</label>
+                            <select id="filtro-ano"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="filtro-status">
+                                <option value="">Todos</option>
+                                <option value="Aberta">Aberta</option>
+                                <option value="Em andamento">Em andamento</option>
+                                <option value="Encerrada">Encerrada</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Buscar por Solicitante</label>
+                            <input type="text" id="filtro-solicitante" placeholder="Digite o nome do solicitante">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Filtrar por Setor do Solicitante</label>
+                            <input type="text" id="filtro-setor-solicitante" placeholder="Digite o setor">
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" onclick="aplicarFiltros()">
+                                Filtrar
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Ordens de Serviço</h3>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nº OS</th>
+                                <th>Data Abertura</th>
+                                <th>Status</th>
+                                <th>Solicitante</th>
+                                <th>Setor</th>
+                                <th>Descrição</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-relatorios"></tbody>
+                    </table>
+                </div>
+
+                <div class="button-group" style="margin-top: 20px;">
+                    <button type="button" class="btn btn-primary" onclick="imprimirRelatorio()">
+                        <i class="bi bi-printer"></i> Imprimir Relatório
+                    </button>
+                </div>
+            </div>
+
+            <div id="page-materiais-mes" class="page hidden">
+
+
+
+                <!-- FILTROS -->
+                <div class="filter-section">
+                    <div class="filter-grid">
+
+                        <div class="form-group">
+                            <label>Mês</label>
+                            <select id="materiais-mes">
+                                <option value="0">Janeiro</option>
+                                <option value="1">Fevereiro</option>
+                                <option value="2">Março</option>
+                                <option value="3">Abril</option>
+                                <option value="4">Maio</option>
+                                <option value="5">Junho</option>
+                                <option value="6">Julho</option>
+                                <option value="7">Agosto</option>
+                                <option value="8">Setembro</option>
+                                <option value="9">Outubro</option>
+                                <option value="10">Novembro</option>
+                                <option value="11">Dezembro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ano</label>
+                            <select id="materiais-ano"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary" onclick="gerarRelatorioMateriais()">
+                                Gerar Relatório
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- CARDS DE RESUMO -->
+                <div class="cards-grid" style="margin-bottom:20px;">
+
+                    <div class="card card-blue">
+                        <div class="card-header">
+                            <div class="card-title">Tipos de Materiais</div>
+                        </div>
+                        <div class="card-value" id="total-materiais-mes">0</div>
+                    </div>
+
+                    <div class="card card-green">
+                        <div class="card-header">
+                            <div class="card-title">Quantidade Total Usada</div>
+                        </div>
+                        <div class="card-value" id="total-quantidade-mes">0</div>
+                    </div>
+
+                </div>
+
+                <!-- TABELA -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Materiais Utilizados</h3>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Quantidade Total</th>
+                                <th>Unidade</th>
+                                <th>Ordens de Serviço</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tabela-materiais-mes">
+                            <tr>
+                                <td colspan="4" class="empty-state">
+                                    Selecione um mês e clique em "Gerar Relatório"
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <!-- BOTÕES -->
+                <div class="button-group" style="margin-top:20px;">
+
+                    <button class="btn btn-success" onclick="imprimirMateriaisMes()">
+                        🖨 Imprimir Relatório de Materiais
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Cadastro de Usuários (ADMIN) -->
+            <div id="page-usuarios" class="page hidden">
+
+                <form id="form-user">
+
+                    <div class="form-section">
+                        <h3>Dados do Usuário</h3>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label>Nome do Usuário</label>
+                                <input type="text" id="user-nome" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>CPF</label>
+                                <input type="text" id="user-cpf" placeholder="Somente números" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>E-mail</label>
+                                <input type="email" id="user-email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Setor</label>
+                                <input type="text" id="user-setor" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Telefone</label>
+                                <input type="text" id="user-telefone" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Senha Inicial</label>
+                                <input type="password" id="user-senha" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Perfil</label>
+                                <select id="user-role">
+                                    <option value="user">Usuário</option>
+                                    <option value="admin">Administrador</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-success">
+                            Cadastrar Usuário
+                        </button>
+                    </div>
+
+                </form>
+
+                <div class="form-section" style="margin-top: 30px;">
+                    <h3>Usuários Cadastrados</h3>
+                    <div id="lista-usuarios"></div>
+                </div>
+
+            </div>
+
+            <!-- Tutorial Page -->
+            <div id="page-tutorial" class="page hidden">
+
+                <div class="form-section">
+                    <h3>Tutorial do Sistema</h3>
+
+                    <div class="tutorial-video">
+
+                        <video width="100%" controls>
+                            <source src="assets/videos/tutorial.mp4" type="video/mp4">
+                            Seu navegador não suporta vídeo.
+                        </video>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- MODAL EDITAR USUÁRIO -->
+            <div id="modal-editar" class="modal hidden">
+                <div class="modal-content">
+                    <h3>Editar Usuário</h3>
+
+                    <input type="hidden" id="edit-id">
+
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input type="text" id="edit-nome">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Setor</label>
+                        <input type="text" id="edit-setor">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Telefone</label>
+                        <input type="text" id="edit-telefone">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Perfil</label>
+                        <select id="edit-role">
+                            <option value="user">Usuário</option>
+                            <option value="admin">Administrador</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-buttons">
+                        <button onclick="salvarEdicao()" class="btn btn-success">
+                            Salvar
+                        </button>
+                        <button onclick="fecharModal()" class="btn btn-danger">
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materiais Page -->
+            <div id="page-materiais" class="page hidden">
+
+                <div class="header">
+                    <div class="header-info">
+                        <h1>Materiais</h1>
+                        <p>Cadastro e gerenciamento de materiais</p>
+                    </div>
+                </div>
+
+
+                <!-- Cadastro de Material -->
+                <form id="form-material">
+                    <div class="form-section">
+                        <h3>Cadastrar Material</h3>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nome do Material</label>
+                                <input type="text" id="material-nome-cad" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Unidade</label>
+                                <select id="material-unidade-cad" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="UN">Unidade</option>
+                                    <option value="M">Metro</option>
+                                    <option value="KG">Quilograma</option>
+                                    <option value="L">Litro</option>
+                                    <option value="CX">Caixa</option>
+                                    <option value="PC">Peça</option>
+                                </select>
+                            </div>
+
+                            <!-- 👇 NOVO CAMPO -->
+                            <div class="form-group">
+                                <label>Quantidade em Estoque</label>
+                                <input type="number" id="material-estoque-cad" min="0" step="0.01" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Descrição (opcional)</label>
+                                <input type="text" id="material-descricao-cad">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-success">
+                            Cadastrar Material
+                        </button>
+                    </div>
+                </form>
+
+
+                <!-- Lista de Materiais -->
+                <div class="form-section" style="margin-top: 30px;">
+                    <h3>Materiais Cadastrados</h3>
+                    <div id="lista-materiais-cadastrados"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal Detalhes -->
+    <div id="modal-detalhes" class="modal hidden">
+        <div class="modal-content" id="area-impressao-os">
+            <div class="modal-header">
+                <h2>Detalhes da Ordem de Serviço</h2>
+            </div>
+
+            <!-- Conteúdo dinâmico -->
+            <div id="detalhes-content"></div>
+
+            <!-- NOVO: Observação -->
+            <div class="form-group" style="margin-top: 20px;">
+                <label>Observação</label>
+                <textarea id="observacao-os" placeholder="Digite uma observação adicional..."
+                    style="width:100%; min-height:80px;"></textarea>
+            </div>
+
+            <div class="button-group">
+
+                <button type="button" class="btn btn-primary" id="btn-alterar-status" onclick="alterarStatus()">
+                    <i class="bi bi-arrow-repeat"></i> Alterar Status
+                </button>
+
+                <button type="button" class="btn btn-success" id="btn-encerrar" onclick="mostrarEncerramento()">
+                    <i class="bi bi-check-circle"></i> Encerrar OS
+                </button>
+
+                <button type="button" class="btn btn-primary" onclick="imprimirDetalhesOS()">
+                    <i class="bi bi-printer"></i> Imprimir OS
+                </button>
+
+                <button type="button" class="btn btn-info" onclick="gerarPDFMateriais()">
+                    <i class="bi bi-file-earmark-pdf"></i> PDF Materiais
+                </button>
+
+                <button type="button" class="btn btn-secondary" onclick="fecharModalDetalhes()">
+                    <i class="bi bi-x-circle"></i> Fechar
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Encerramento -->
+    <div id="modal-encerramento" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Encerrar Ordem de Serviço</h2>
+            </div>
+            <form id="form-encerramento">
+                <div class="form-group">
+                    <label>Data e Hora de Encerramento</label>
+                    <input type="datetime-local" id="data-encerramento" required>
+                </div>
+                <div class="form-group">
+                    <label>Observação Final</label>
+                    <textarea id="observacao-final" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Assinatura da Chefia</label>
+                    <input type="text" id="assinatura-chefia" required placeholder="Digite o nome">
+                </div>
+                <div class="form-group">
+                    <label>Assinatura de Quem Recebeu</label>
+                    <input type="text" id="assinatura-recebedor" required placeholder="Digite o nome">
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="btn btn-success">
+                        Confirmar Encerramento
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="fecharModalEncerramento()">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Alerta -->
+    <div id="modal-alerta" class="modal hidden">
+        <div class="modal-box">
+            <h3 id="modal-alerta-titulo">Aviso</h3>
+            <p id="modal-alerta-mensagem"></p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="fecharAlerta()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmação -->
+    <div id="modal-confirm" class="modal hidden">
+        <div class="modal-box">
+            <h3>Confirmação</h3>
+            <p id="modal-confirm-mensagem"></p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="fecharConfirm()">Cancelar</button>
+                <button class="btn btn-danger" id="btn-confirmar-acao">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script type="module" src="assets/js/auth.js"></script>
+    <script type="module" src="assets/js/app.js"></script>
+    <script type="module" src="assets/js/admin-users.js"></script>
+
+    <footer class="app-footer">
+        <span>Desenvolvido pela Secretaria de Eficiência Governamental - SEMEG </span>
+        <span>Prefeitura Municipal de Oriximiná - A transformação não vai parar</span>
+    </footer>
+
+</body>
+
+</html>

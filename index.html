@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login – Sistema OS</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+
+<body class="login-body">
+    <div class="login-container">
+        <!-- Cabeçalho institucional -->
+        <div class="login-header">
+            <img src="assets/img/prefeitura.png" alt="Prefeita" class="login-photo">
+            <h2>Sistema de Ordem de Serviço</h2>
+            <p>SEINFRA – Secretaria de infraestrutura</p>
+            <span>Secretária: Liliana Bentes</span>
+        </div>
+
+        <!-- Formulário -->
+        <div class="login-form">
+
+            <div class="input-group">
+                <input type="email" id="email" placeholder="E-mail institucional">
+                <span class="error-msg" id="email-error">
+                    <i class="bi bi-exclamation-circle"></i> Informe o e-mail
+                </span>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Senha">
+                <span class="error-msg" id="password-error">
+                    <i class="bi bi-exclamation-circle"></i> Informe a senha
+                </span>
+            </div>
+
+            <div class="progress-container" id="login-loading">
+                <div class="progress-bar"></div>
+            </div>
+
+            <button id="btn-login" onclick="login()">Entrar</button>
+        </div>
+
+
+        <!-- Rodapé -->
+        <footer class="login-footer">
+            <p>© 2026 – SEMEG</p>
+            <p>Secretaria de Eficiência Governamental</p>
+        </footer>
+
+    </div>
+
+    <script type="module" src="assets/js/auth.js"></script>
+</body>
+
+</html>
