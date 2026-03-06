@@ -633,11 +633,13 @@
     }
 
     .login-photo {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid #3498db;
+        width: 120px;
+        height: auto;
+        object-fit: contain;
+        border: none;
+        /* remove o contorno azul */
+        border-radius: 0;
+        /* remove formato circular */
         margin-bottom: 15px;
     }
 
