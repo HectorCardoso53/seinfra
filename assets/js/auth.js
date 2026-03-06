@@ -61,7 +61,7 @@ window.login = async function () {
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    window.location.replace('dashboard.html');
+    window.location.replace('servicos.html');
   } catch (error) {
     loading.style.display = 'none';
     btn.disabled = false;
